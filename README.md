@@ -1,2 +1,2 @@
-# OnlyFightsOrFlight_Mod
+# OnlyFightOrFlight_Mod
 A simple, highly-configurable minecraft mod that restricts building while in combat.
