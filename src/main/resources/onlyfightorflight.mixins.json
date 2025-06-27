@@ -1,6 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "xyz.mrfrostydev.onlyfightflight.onlyfightorflight.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "package": "xyz.mrfrostydev.onlyfightflight.mixin",
+  "mixins": [],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
   

@@ -1,4 +1,4 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.registries;
+package xyz.mrfrostydev.onlyfightorflight.registries;
 
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
@@ -6,9 +6,9 @@ import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data.OutOfCombatData;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data.OutOfCombatSerializer;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.OnlyFofMain;
+import xyz.mrfrostydev.onlyfightorflight.data.OutOfCombatData;
+import xyz.mrfrostydev.onlyfightorflight.data.OutOfCombatSerializer;
+import xyz.mrfrostydev.onlyfightorflight.OnlyFofMain;
 
 public class DataAttachmentRegistry {
     public static DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, OnlyFofMain.MOD_ID);

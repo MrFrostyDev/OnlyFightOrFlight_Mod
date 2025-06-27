@@ -1,4 +1,4 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data;
+package xyz.mrfrostydev.onlyfightorflight.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,8 +22,23 @@ public class OutOfCombatData {
     }
 
     public void startCombat(int outTime){
-        this.outTime = outTime;
-        isOutOfCombat = false;
+        if(isOutOfCombat){
+            this.outTime = outTime;
+            isOutOfCombat = false;
+        }
+    }
+
+    public void addTime(int addedTime){
+        this.outTime = this.outTime + addedTime;
+    }
+
+    public void updateTime(int time){
+        if(isOutOfCombat){
+            startCombat(time);
+        }
+        else if(this.outTime < time){
+            this.outTime = time;
+        }
     }
 
     public void tick(){

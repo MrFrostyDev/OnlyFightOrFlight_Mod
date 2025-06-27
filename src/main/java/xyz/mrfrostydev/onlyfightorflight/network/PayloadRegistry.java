@@ -1,10 +1,10 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.network;
+package xyz.mrfrostydev.onlyfightorflight.network;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.OnlyFofMain;
+import xyz.mrfrostydev.onlyfightorflight.OnlyFofMain;
 
 @EventBusSubscriber
 public class PayloadRegistry {

@@ -1,4 +1,4 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.events;
+package xyz.mrfrostydev.onlyfightorflight.events;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -6,9 +6,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data.OutOfCombatData;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.network.SyncOutOfCombatPacket;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.registries.DataAttachmentRegistry;
+import xyz.mrfrostydev.onlyfightorflight.data.OutOfCombatData;
+import xyz.mrfrostydev.onlyfightorflight.network.SyncOutOfCombatPacket;
+import xyz.mrfrostydev.onlyfightorflight.registries.DataAttachmentRegistry;
 
 @EventBusSubscriber
 public class PlayerEvents {

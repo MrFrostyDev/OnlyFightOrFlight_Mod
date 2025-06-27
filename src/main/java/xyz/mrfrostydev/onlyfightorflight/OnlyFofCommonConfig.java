@@ -8,7 +8,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class OnlyFofServerConfig {
+public class OnlyFofCommonConfig {
 
     public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
     public static final ModConfigSpec SPEC;
@@ -23,7 +23,6 @@ public class OnlyFofServerConfig {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLOCK_BLACKLIST;
 
     public static final ModConfigSpec.ConfigValue<Boolean> DISABLE_AGGRO_COMBAT;
-    public static final ModConfigSpec.ConfigValue<Boolean> CANT_USE_ITEMS;
 
     public static final ModConfigSpec.ConfigValue<Boolean> SAY_YES;
     
@@ -43,23 +42,19 @@ public class OnlyFofServerConfig {
         BUILDER.comment("");
         BUILDER.comment("Determine whether being targeted by a mod is considered in-combat. \"true\" disables it. (Default: false)");
         DISABLE_AGGRO_COMBAT = BUILDER.worldRestart().define("disableAggroCombat", false);
+        BUILDER.pop();
 
         BUILDER.push("Allowed/Disallowed Settings");
         BUILDER.comment("");
         BUILDER.comment("Allow certain blocks to be placed regardless if player is in combat. (If blockBlacklist has any valid entries, this list is ignored)");
-        BUILDER.comment("Example: \n blockWhitelist = [\n \t\"minecraft:dirt\", \t\"minecraft:crafting_table\", \t\"minecraft:glass\"\n ]");
+        BUILDER.comment("Example: \n blockWhitelist = [\n \t\"minecraft:dirt\",\n \t\"minecraft:crafting_table\",\n \t\"minecraft:glass\"\n ]");
         BUILDER.comment("");
         BLOCK_WHITELIST = BUILDER.worldRestart().defineListAllowEmpty("blockWhitelist", List.of(), () -> "", ValidItemPredicate.create());
         BUILDER.comment("");
         BUILDER.comment("Deny certain blocks to be placed if player is in combat. This will cause every other block to be placeable regardless if player is in combat.");
-        BUILDER.comment("Example: \n blockBlacklist = [\n \t\"minecraft:sand\", \t\"minecraft:gravel\", \t\"modid:something_block\"\n ]");
+        BUILDER.comment("Example: \n blockBlacklist = [\n \t\"minecraft:sand\",\n \t\"minecraft:gravel\",\n \t\"modid:something_block\"\n ]");
         BUILDER.comment("");
         BLOCK_BLACKLIST = BUILDER.worldRestart().defineListAllowEmpty("blockBlacklist", List.of(), () -> "", ValidItemPredicate.create());
-        BUILDER.comment("");
-        BUILDER.comment("Deny use of items while in combat. (Any items with Right-Click functionality, Default: false)");
-        BUILDER.comment("This setting is EXPERIMENTAL and may worsen the experience. (Ex. disable bows, disable eating food, etc)");
-        CANT_USE_ITEMS = BUILDER.worldRestart().define("cantUseItems", false);
-
         BUILDER.pop();
 
         BUILDER.push("Performance");
@@ -69,6 +64,7 @@ public class OnlyFofServerConfig {
         UPDATE_INTERVAL = BUILDER.worldRestart().define("updateInterval", 60);
         BUILDER.comment("");
         BUILDER.comment("Change the radius of the check for surrounding mobs. (Default: 16 in blocks)");
+        BUILDER.comment("Don't make this too high!");
         RADIUS_CHECK = BUILDER.worldRestart().define("radiusCheck", 16);
         BUILDER.pop();
 

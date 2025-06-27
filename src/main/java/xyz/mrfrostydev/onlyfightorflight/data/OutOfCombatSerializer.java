@@ -1,4 +1,4 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data;
+package xyz.mrfrostydev.onlyfightorflight.data;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

@@ -1,4 +1,4 @@
-package xyz.mrfrostydev.onlyfightflight.onlyfightorflight.network;
+package xyz.mrfrostydev.onlyfightorflight.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
@@ -7,9 +7,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.OnlyFofMain;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.data.OutOfCombatData;
-import xyz.mrfrostydev.onlyfightflight.onlyfightorflight.registries.DataAttachmentRegistry;
+import xyz.mrfrostydev.onlyfightorflight.OnlyFofMain;
+import xyz.mrfrostydev.onlyfightorflight.data.OutOfCombatData;
+import xyz.mrfrostydev.onlyfightorflight.registries.DataAttachmentRegistry;
 
 public record SyncOutOfCombatPacket(boolean isOutOfCombat, int outTime) implements CustomPacketPayload {
     public static final Type<SyncOutOfCombatPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(OnlyFofMain.MOD_ID, "sync_out_of_combat"));
