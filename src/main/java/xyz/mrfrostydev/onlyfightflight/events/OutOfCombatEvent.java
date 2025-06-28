@@ -1,13 +1,16 @@
 package xyz.mrfrostydev.onlyfightflight.events;
 
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 import xyz.mrfrostydev.onlyfightflight.data.OutOfCombatData;
 
-public class OutOfCombatEvent extends Event {
+public class OutOfCombatEvent extends PlayerEvent {
     private OutOfCombatData data;
 
-    public OutOfCombatEvent(OutOfCombatData data){
+    public OutOfCombatEvent(Player player, OutOfCombatData data){
+        super(player);
         this.data = data;
     }
 
@@ -21,8 +24,8 @@ public class OutOfCombatEvent extends Event {
         private int outTime;
         private int newOutTime;
 
-        public Start(OutOfCombatData data, int outTime){
-            super(data);
+        public Start(Player player, OutOfCombatData data, int outTime){
+            super(player, data);
             this.outTime = outTime;
             this.newOutTime = outTime;
         }
@@ -42,8 +45,8 @@ public class OutOfCombatEvent extends Event {
     }
 
     public static class End extends OutOfCombatEvent{
-        public End(OutOfCombatData data){
-            super(data);
+        public End(Player player, OutOfCombatData data){
+            super(player, data);
         }
     }
 

@@ -27,6 +27,12 @@ public class OnlyFofPacketHandler {
                 .decoder(SyncOutOfCombatPacket::new)
                 .consumerMainThread(SyncOutOfCombatPacket::handle)
                 .add();
+
+        INSTANCE.messageBuilder(ClientPlayOutOfCombatPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ClientPlayOutOfCombatPacket::encode)
+                .decoder(ClientPlayOutOfCombatPacket::new)
+                .consumerMainThread(ClientPlayOutOfCombatPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToPlayer(ServerPlayer player, MSG msg){

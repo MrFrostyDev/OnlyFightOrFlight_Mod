@@ -19,6 +19,7 @@ public class OnlyFofCommonConfig {
 
     public static final ForgeConfigSpec.ConfigValue<Integer> TIME_BY_ATTACKING;
     public static final ForgeConfigSpec.ConfigValue<Integer> TIME_BY_DAMAGED;
+    public static final ForgeConfigSpec.ConfigValue<Integer> TIME_BY_TARGETED;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> UPDATE_INTERVAL;
     public static final ForgeConfigSpec.ConfigValue<Integer> RADIUS_CHECK;
@@ -35,11 +36,14 @@ public class OnlyFofCommonConfig {
 
         BUILDER.push("Time Adjustments");
         BUILDER.comment("");
-        BUILDER.comment("Change the time set in-combat when player is ATTACKING. (Default: 500 in ticks)");
-        TIME_BY_ATTACKING = BUILDER.worldRestart().define("timeByAttacking", 200);
+        BUILDER.comment("Change the time set in-combat when player is ATTACKING. (Default: 300 in ticks)");
+        TIME_BY_ATTACKING = BUILDER.worldRestart().define("timeByAttacking", 300);
         BUILDER.comment("");
-        BUILDER.comment("Change the time set in-combat when player is being DAMAGED. (Default: 500 in ticks)");
-        TIME_BY_DAMAGED = BUILDER.worldRestart().define("timeByDamaged", 500);
+        BUILDER.comment("Change the time set in-combat when player is being DAMAGED. (Default: 400 in ticks)");
+        TIME_BY_DAMAGED = BUILDER.worldRestart().define("timeByDamaged", 400);
+        BUILDER.comment("");
+        BUILDER.comment("Change the time set in-combat when player is being TARGETED by a mob. (Default: 300 in ticks)");
+        TIME_BY_TARGETED = BUILDER.worldRestart().define("timeByTargeted", 300);
         BUILDER.pop();
 
         BUILDER.push("Enable/Disable Features");
@@ -53,7 +57,10 @@ public class OnlyFofCommonConfig {
         BUILDER.comment("Allow certain blocks to be placed regardless if player is in combat. (If blockBlacklist has any valid entries, this list is ignored)");
         BUILDER.comment("Example: \n blockWhitelist = [\n \t\"minecraft:dirt\",\n \t\"minecraft:crafting_table\",\n \t\"minecraft:glass\"\n ]");
         BUILDER.comment("");
-        BLOCK_WHITELIST = BUILDER.worldRestart().defineListAllowEmpty("blockWhitelist", List.of(), ValidItemPredicate.create());
+        BLOCK_WHITELIST = BUILDER.worldRestart().defineListAllowEmpty("blockWhitelist", List.of(
+                "minecraft:torch", "minecraft:redstone_torch", "minecraft:soul_torch",
+                "minecraft:lantern", "minecraft:soul_lantern", "minecraft:cobweb"
+        ), ValidItemPredicate.create());
         BUILDER.comment("");
         BUILDER.comment("Deny certain blocks to be placed if player is in combat. This will cause every other block to be placeable regardless if player is in combat.");
         BUILDER.comment("Example: \n blockBlacklist = [\n \t\"minecraft:sand\",\n \t\"minecraft:gravel\",\n \t\"modid:something_block\"\n ]");

@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -17,6 +18,9 @@ import net.minecraftforge.fml.common.Mod;
 import xyz.mrfrostydev.onlyfightflight.OnlyFofCommonConfig;
 import xyz.mrfrostydev.onlyfightflight.client.OutOfCombatOverlay;
 import xyz.mrfrostydev.onlyfightflight.data.OutOfCombatCapability;
+import xyz.mrfrostydev.onlyfightflight.network.ClientPlayOutOfCombatPacket;
+import xyz.mrfrostydev.onlyfightflight.network.OnlyFofPacketHandler;
+import xyz.mrfrostydev.onlyfightflight.network.SyncOutOfCombatPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +32,15 @@ public class OutOfCombatEvents {
 
     @SubscribeEvent
     public static void OutOfCombatStart(OutOfCombatEvent.Start event){
-        if(Minecraft.getInstance().player != null){
-            OutOfCombatOverlay.startAnimation();
+        if(event.getEntity() instanceof ServerPlayer svplayer){
+            OnlyFofPacketHandler.sendToPlayer(svplayer, new ClientPlayOutOfCombatPacket());
         }
     }
 
     @SubscribeEvent
     public static void OutOfCombatEnd(OutOfCombatEvent.End event){
-        if(Minecraft.getInstance().player != null){
-            OutOfCombatOverlay.startAnimation();
+        if(event.getEntity() instanceof ServerPlayer svplayer){
+            OnlyFofPacketHandler.sendToPlayer(svplayer, new ClientPlayOutOfCombatPacket());
         }
     }
 
@@ -63,7 +67,6 @@ public class OutOfCombatEvents {
                 }
             }
         });
-
     }
 
     @SubscribeEvent
@@ -78,7 +81,8 @@ public class OutOfCombatEvents {
     @SubscribeEvent
     public static void OutOfCombatDamaged(LivingHurtEvent event){
         Entity victim = event.getEntity();
-        if(!(victim instanceof Player player)) return;
+        Entity attacker = event.getSource().getEntity();
+        if(!(victim instanceof Player player) || attacker == null) return;
         player.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent((data) -> {
             data.updateTime(OnlyFofCommonConfig.TIME_BY_DAMAGED.get());
         });

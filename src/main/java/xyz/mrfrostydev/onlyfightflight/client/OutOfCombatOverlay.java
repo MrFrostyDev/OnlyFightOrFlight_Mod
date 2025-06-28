@@ -18,7 +18,7 @@ public class OutOfCombatOverlay implements IGuiOverlay {
     private static final ResourceLocation COMBAT_START_TEXTURE = ResourceLocation.fromNamespaceAndPath(OnlyFofMain.MOD_ID, "textures/gui/combat/fullcombaticon_start.png");
     private static final ResourceLocation COMBAT_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(OnlyFofMain.MOD_ID, "textures/gui/combat/fullcombaticon_end.png");
     private static final int[] TEXTURE_ARRAY = {0, 64, 128, 192, 256, 320};
-    private static final int DEFAULT_PLAYTIME = 20;
+    private static final int DEFAULT_PLAYTIME = 15;
 
     static final int IMAGE_WIDTH = 64;
     static final int IMAGE_HEIGHT = 64;
@@ -47,7 +47,7 @@ public class OutOfCombatOverlay implements IGuiOverlay {
 
         OutOfCombatData data = player.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).resolve().get();
 
-        int posX = (screenWidth / 2) - (IMAGE_WIDTH / 2);
+        int posX = (screenWidth / 2) - (IMAGE_WIDTH / 2) + 1;
         int posY = screenHeight - 50 - (IMAGE_HEIGHT / 2);
 
         // guiGraphics.blit(ResourceLocation atlasLocation,
@@ -56,20 +56,12 @@ public class OutOfCombatOverlay implements IGuiOverlay {
         // int width, int height,
         // int textureWidth, int textureHeight)
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         if(active){
-            if (player.tickCount >= nextTickEnd || player.tickCount < 40){
-                active = false;
-                nextTickEnd = player.tickCount;
-            }
-
             float progress = (float)(DEFAULT_PLAYTIME - (nextTickEnd - player.tickCount)) / DEFAULT_PLAYTIME;
             int index = Mth.floor((progress % ((float)DEFAULT_PLAYTIME / TEXTURE_ARRAY.length)) * TEXTURE_ARRAY.length);
             if(index >= TEXTURE_ARRAY.length || index < 0) return;
 
             if(data.isOutOfCombat()){
-                RenderSystem.setShaderTexture(0, COMBAT_END_TEXTURE);
                 guiGraphics.blit(COMBAT_END_TEXTURE,
                         posX, posY,
                         0, TEXTURE_ARRAY[index],
@@ -77,7 +69,6 @@ public class OutOfCombatOverlay implements IGuiOverlay {
                         TEXTURE_WIDTH, TEXTURE_HEIGHT);
             }
             else{
-                RenderSystem.setShaderTexture(0, COMBAT_START_TEXTURE);
                 guiGraphics.blit(COMBAT_START_TEXTURE,
                         posX, posY,
                         0, TEXTURE_ARRAY[index],
@@ -86,7 +77,6 @@ public class OutOfCombatOverlay implements IGuiOverlay {
             }
         }
         else if(!data.isOutOfCombat()){
-            RenderSystem.setShaderTexture(0, COMBAT_START_TEXTURE);
             guiGraphics.blit(COMBAT_START_TEXTURE,
                     posX, posY,
                     0, TEXTURE_ARRAY[TEXTURE_ARRAY.length - 1],
