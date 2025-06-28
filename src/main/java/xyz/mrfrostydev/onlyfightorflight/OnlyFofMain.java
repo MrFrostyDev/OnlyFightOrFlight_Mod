@@ -15,7 +15,9 @@ public class OnlyFofMain {
 
     public OnlyFofMain(IEventBus modEventBus, ModContainer modContainer) {
         DataAttachmentRegistry.register(modEventBus);
+
         modContainer.registerConfig(ModConfig.Type.COMMON, OnlyFofCommonConfig.SPEC, String.format("%s-common.toml", OnlyFofMain.MOD_ID));
+        modContainer.registerConfig(ModConfig.Type.CLIENT, OnlyFofClientConfig.SPEC, String.format("%s-client.toml", OnlyFofMain.MOD_ID));
     }
 }
 

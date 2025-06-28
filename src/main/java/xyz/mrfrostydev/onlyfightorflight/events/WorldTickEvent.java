@@ -26,7 +26,7 @@ public class WorldTickEvent {
         Level level = event.getLevel();
         if(level.isClientSide() || level.getServer() == null) return;
 
-        event.getLevel().players().stream().toList().forEach(player -> {
+        level.players().stream().toList().forEach(player -> {
             if (!(player instanceof ServerPlayer svplayer)) return;
 
             // Rather hefty check if ran frequently so try to reduce the amount of calls.
@@ -49,12 +49,17 @@ public class WorldTickEvent {
 
             OutOfCombatData data = svplayer.getData(DataAttachmentRegistry.OUT_OF_COMBAT);
             if(isBeingTargetted){
-                data.addTime(checkFreq);
+                if(data.isOutOfCombat()){
+                    data.startCombat(OnlyFofCommonConfig.TIME_BY_TARGETED.get());
+                }
+                else{
+                    data.addTime(checkFreq);
+                }
             }
             else if (data.getOutTime() > 0){
                 data.tick();
-                PacketDistributor.sendToPlayer(svplayer, SyncOutOfCombatPacket.create(data));
             }
+            PacketDistributor.sendToPlayer(svplayer, SyncOutOfCombatPacket.create(data));
         });
     }
 }

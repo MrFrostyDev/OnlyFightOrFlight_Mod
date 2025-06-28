@@ -15,10 +15,17 @@ public class PayloadRegistry {
                 .versioned("1.0")
                 .optional();
 
+        registrar.playToClient(
+                ClientPlayOutOfCombatPacket.TYPE,
+                ClientPlayOutOfCombatPacket.STREAM_CODEC,
+                ClientPlayOutOfCombatPacket::handle
+        );
+
         registrar.playBidirectional(
                 SyncOutOfCombatPacket.TYPE,
                 SyncOutOfCombatPacket.STREAM_CODEC,
                 SyncOutOfCombatPacket::handle
         );
+
     }
 }

@@ -3,11 +3,18 @@ package xyz.mrfrostydev.onlyfightorflight.data;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.common.NeoForge;
+import xyz.mrfrostydev.onlyfightorflight.events.OutOfCombatEvent;
 
 public class OutOfCombatData {
     private Player player;
     private boolean isOutOfCombat;
     private int outTime;
+
+    public OutOfCombatData(){
+        this.isOutOfCombat = true;
+        this.outTime = 0;
+    }
 
     public OutOfCombatData(Player player){
         this.player = player;
@@ -22,10 +29,21 @@ public class OutOfCombatData {
     }
 
     public void startCombat(int outTime){
-        if(isOutOfCombat){
-            this.outTime = outTime;
-            isOutOfCombat = false;
+        OutOfCombatEvent.Start event = new OutOfCombatEvent.Start(this.player, this, outTime);
+        if(isOutOfCombat && !NeoForge.EVENT_BUS.post(event).isCanceled()){
+            this.outTime = event.getNewOutTime();
+            this.isOutOfCombat = false;
         }
+    }
+
+    public void copyFrom(OutOfCombatData data){
+        this.isOutOfCombat = data.isOutOfCombat();
+        this.outTime = data.getOutTime();
+    }
+
+    public void setData(boolean isOutOfCombat, int outTime){
+        this.isOutOfCombat = isOutOfCombat;
+        this.outTime = outTime;
     }
 
     public void addTime(int addedTime){
@@ -44,6 +62,7 @@ public class OutOfCombatData {
     public void tick(){
         outTime = outTime - 1;
         if(outTime <= 0){
+            NeoForge.EVENT_BUS.post(new OutOfCombatEvent.End(this.player, this));
             isOutOfCombat = true;
         }
     }

@@ -67,8 +67,8 @@ public class OutOfCombatEvents {
     @SubscribeEvent
     public static void OutOfCombatDamaged(LivingDamageEvent.Post event){
         Entity victim = event.getEntity();
-        if(!(victim instanceof Player player)) return;
-
+        Entity attacker = event.getSource().getEntity();
+        if(!(victim instanceof Player player) || attacker == null) return;
         OutOfCombatData data = player.getData(DataAttachmentRegistry.OUT_OF_COMBAT);
         data.updateTime(OnlyFofCommonConfig.TIME_BY_DAMAGED.get());
     }
@@ -96,5 +96,4 @@ public class OutOfCombatEvents {
         }
         return blockCache;
     }
-
 }
