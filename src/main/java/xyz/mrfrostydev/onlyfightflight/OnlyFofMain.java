@@ -13,7 +13,7 @@ import xyz.mrfrostydev.onlyfightflight.network.OnlyFofPacketHandler;
 public class OnlyFofMain {
 
     public static final String MOD_ID = "onlyfightorflight";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public OnlyFofMain() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

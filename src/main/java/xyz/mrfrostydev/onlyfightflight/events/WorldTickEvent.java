@@ -50,7 +50,12 @@ public class WorldTickEvent {
             svplayer.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent(data -> {
                 if(isBeingTargetted || data.getOutTime() > 0){
                     if(isBeingTargetted){
-                        data.addTime(checkFreq);
+                        if(data.isOutOfCombat()){
+                            data.startCombat(OnlyFofCommonConfig.TIME_BY_TARGETED.get());
+                        }
+                        else{
+                            data.addTime(checkFreq);
+                        }
                     }
                     else if (data.getOutTime() > 0){
                         data.tick();

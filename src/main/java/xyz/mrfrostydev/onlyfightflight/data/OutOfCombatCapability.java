@@ -2,6 +2,7 @@ package xyz.mrfrostydev.onlyfightflight.data;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -16,11 +17,16 @@ public class OutOfCombatCapability implements ICapabilityProvider, INBTSerializa
     public static Capability<OutOfCombatData> OUT_OF_COMBAT = CapabilityManager.get(new CapabilityToken<OutOfCombatData>(){});
 
     private OutOfCombatData data = null;
+    private final Player player;
     private final LazyOptional<OutOfCombatData> optional = LazyOptional.of(this::createData);
+
+    public OutOfCombatCapability(Player player){
+        this.player = player;
+    }
 
     public OutOfCombatData createData(){
         if (data == null){
-            this.data = new OutOfCombatData();
+            this.data = new OutOfCombatData(player);
         }
 
         return this.data;

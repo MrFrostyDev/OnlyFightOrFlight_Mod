@@ -1,9 +1,9 @@
 package xyz.mrfrostydev.onlyfightflight.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
-import xyz.mrfrostydev.onlyfightflight.data.OutOfCombatCapability;
 import xyz.mrfrostydev.onlyfightflight.data.OutOfCombatData;
 
 import java.util.function.Supplier;
@@ -35,9 +35,9 @@ public class SyncOutOfCombatPacket {
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            Minecraft.getInstance().player.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent(data -> {
-                data.setData(isOutOfCombat, outTime);
-            });
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () ->
+                    () -> SyncOutOfCombatHandler.handlePacket(supplier, isOutOfCombat, outTime)
+            );
         });
     }
 }

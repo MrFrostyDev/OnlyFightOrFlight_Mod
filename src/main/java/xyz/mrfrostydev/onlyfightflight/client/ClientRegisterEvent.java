@@ -11,6 +11,6 @@ public class ClientRegisterEvent {
 
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event){
-        event.registerAboveAll("out_of_combat_icon", new OutOfCombatOverlay());
+        event.registerAboveAll("out_of_combat_overlay", new OutOfCombatOverlay());
     }
 }

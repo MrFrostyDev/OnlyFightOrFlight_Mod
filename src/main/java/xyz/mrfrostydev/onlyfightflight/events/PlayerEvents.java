@@ -64,9 +64,9 @@ public class PlayerEvents {
     @SubscribeEvent
     public static void onAttackCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event){
         Entity entity = event.getObject();
-        if(entity instanceof Player){
+        if(entity instanceof Player player){
             if(!entity.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).isPresent()){
-                event.addCapability(ResourceLocation.fromNamespaceAndPath(OnlyFofMain.MOD_ID, "out_of_combat_data"), new OutOfCombatCapability());
+                event.addCapability(ResourceLocation.fromNamespaceAndPath(OnlyFofMain.MOD_ID, "out_of_combat_data"), new OutOfCombatCapability(player));
             }
         }
     }
