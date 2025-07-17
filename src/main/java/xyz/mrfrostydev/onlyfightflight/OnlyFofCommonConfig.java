@@ -1,12 +1,16 @@
 package xyz.mrfrostydev.onlyfightflight;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
@@ -27,6 +31,9 @@ public class OnlyFofCommonConfig {
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLOCK_WHITELIST;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLOCK_BLACKLIST;
 
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> MOB_WHITELIST;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> MOB_BLACKLIST;
+
     public static final ForgeConfigSpec.ConfigValue<Boolean> DISABLE_AGGRO_COMBAT;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SAY_YES;
@@ -36,8 +43,8 @@ public class OnlyFofCommonConfig {
 
         BUILDER.push("Time Adjustments");
         BUILDER.comment("");
-        BUILDER.comment("Change the time set in-combat when player is ATTACKING. (Default: 300 in ticks)");
-        TIME_BY_ATTACKING = BUILDER.worldRestart().define("timeByAttacking", 300);
+        BUILDER.comment("Change the time set in-combat when player is ATTACKING. (Default: 200 in ticks)");
+        TIME_BY_ATTACKING = BUILDER.worldRestart().define("timeByAttacking", 200);
         BUILDER.comment("");
         BUILDER.comment("Change the time set in-combat when player is being DAMAGED. (Default: 400 in ticks)");
         TIME_BY_DAMAGED = BUILDER.worldRestart().define("timeByDamaged", 400);
@@ -66,6 +73,18 @@ public class OnlyFofCommonConfig {
         BUILDER.comment("Example: \n blockBlacklist = [\n \t\"minecraft:sand\",\n \t\"minecraft:gravel\",\n \t\"modid:something_block\"\n ]");
         BUILDER.comment("");
         BLOCK_BLACKLIST = BUILDER.worldRestart().defineListAllowEmpty("blockBlacklist", List.of(), ValidItemPredicate.create());
+
+        BUILDER.comment("");
+        BUILDER.comment("Allow certain mobs/entities to not trigger in-combat regardless if player attacks or is attacked by them. (If mobBlacklist has any valid entries, this list is ignored)");
+        BUILDER.comment("Written the same as blockWhitelist.");
+        BUILDER.comment("");
+        MOB_WHITELIST = BUILDER.worldRestart().defineListAllowEmpty("mobWhitelist", List.of(), ValidMobPredicate.create());
+        BUILDER.comment("");
+        BUILDER.comment("Make only certain mobs/entities trigger in-combat effects. This will cause all other mobs/entities");
+        BUILDER.comment("to never trigger combat effects regardless if you attack them or been attacked by them.");
+        BUILDER.comment("Written the same as blockBlacklist.");
+        BUILDER.comment("");
+        MOB_BLACKLIST = BUILDER.worldRestart().defineListAllowEmpty("mobBlacklist", List.of(), ValidMobPredicate.create());
         BUILDER.pop();
 
         BUILDER.push("Performance");
@@ -100,6 +119,24 @@ public class OnlyFofCommonConfig {
             if (resourceLocation == null) return false;
 
             return BuiltInRegistries.ITEM.get(resourceLocation) != Items.AIR;
+        }
+    }
+
+    private static class ValidMobPredicate implements Predicate<Object> {
+        public ValidMobPredicate(){};
+
+        static ValidMobPredicate create(){
+            return new ValidMobPredicate();
+        };
+
+        @Override
+        public boolean test(Object o) {
+            if(!(o instanceof String s)) return false;
+            ResourceLocation resourceLocation = ResourceLocation.tryParse(s);
+            if (resourceLocation == null) return false;
+
+            Optional<Holder.Reference<EntityType<?>>> holder = ForgeRegistries.ENTITY_TYPES.getDelegate(resourceLocation);
+            return holder.isPresent();
         }
     }
 

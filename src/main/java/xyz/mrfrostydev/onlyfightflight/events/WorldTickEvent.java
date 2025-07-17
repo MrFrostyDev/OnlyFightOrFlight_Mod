@@ -34,13 +34,24 @@ public class WorldTickEvent {
                 float checkRadius = OnlyFofCommonConfig.RADIUS_CHECK.get();
                 AABB area = new AABB(svplayer.blockPosition()).inflate(checkRadius, checkRadius, checkRadius);
                 Predicate<Entity> predicate = (entity -> {
-                    if(entity instanceof Mob mob){
-                        LivingEntity target = mob.getTarget();
-                        return target != null && target.is(svplayer);
+                    if(entity instanceof Mob mob) {
+                        boolean isAllowed = true;
+                        if (OutOfCombatEvents.isBlacklistOrWhitelistSet(OnlyFofCommonConfig.MOB_BLACKLIST.get(), OnlyFofCommonConfig.MOB_WHITELIST.get())) {
+                            OutOfCombatEvents.getMobCache();
+                            boolean blacklistFilter = OutOfCombatEvents.isMobBlacklist && OutOfCombatEvents.mobCache.stream().anyMatch(e -> mob.getType().equals(e));
+                            boolean whitelistFilter = !OutOfCombatEvents.isMobBlacklist && OutOfCombatEvents.mobCache.stream().noneMatch(e -> mob.getType().equals(e));
+
+                            if(!blacklistFilter && !whitelistFilter){
+                                isAllowed = false;
+                            }
+                        }
+                        if(isAllowed){
+                            LivingEntity target = mob.getTarget();
+                            return target != null && target.is(svplayer);
+                        }
                     }
                     return false;
                 });
-
                 List<Entity> nearby = level.getEntities(player, area, predicate);
                 isBeingTargetted = !nearby.isEmpty();
             } else {
