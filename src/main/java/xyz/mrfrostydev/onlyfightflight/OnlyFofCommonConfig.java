@@ -106,11 +106,11 @@ public class OnlyFofCommonConfig {
     }
 
     private static class ValidItemPredicate implements Predicate<Object> {
-        public ValidItemPredicate(){};
+        public ValidItemPredicate(){}
 
         static ValidItemPredicate create(){
             return new ValidItemPredicate();
-        };
+        }
 
         @Override
         public boolean test(Object o) {
@@ -118,16 +118,16 @@ public class OnlyFofCommonConfig {
             ResourceLocation resourceLocation = ResourceLocation.tryParse(s);
             if (resourceLocation == null) return false;
 
-            return BuiltInRegistries.ITEM.get(resourceLocation) != Items.AIR;
+            return ForgeRegistries.ITEMS.getValue(resourceLocation) != Items.AIR;
         }
     }
 
     private static class ValidMobPredicate implements Predicate<Object> {
-        public ValidMobPredicate(){};
+        public ValidMobPredicate(){}
 
         static ValidMobPredicate create(){
             return new ValidMobPredicate();
-        };
+        }
 
         @Override
         public boolean test(Object o) {
