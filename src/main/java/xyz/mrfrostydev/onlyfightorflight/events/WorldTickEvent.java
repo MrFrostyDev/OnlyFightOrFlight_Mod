@@ -31,7 +31,9 @@ public class WorldTickEvent {
             // Rather hefty check if ran frequently so try to reduce the amount of calls.
             boolean isBeingTargetted = false;
             int checkFreq = OnlyFofCommonConfig.UPDATE_INTERVAL.get();
-            if(!OnlyFofCommonConfig.DISABLE_AGGRO_COMBAT.get() && level.getServer().getTickCount() % checkFreq == 0){
+            if(!OnlyFofCommonConfig.DISABLE_AGGRO_COMBAT.get()
+                    && OnlyFofCommonConfig.TIME_BY_TARGETED.get() > 0
+                    && level.getServer().getTickCount() % checkFreq == 0){
                 float checkRadius = OnlyFofCommonConfig.RADIUS_CHECK.get();
                 AABB area = new AABB(svplayer.blockPosition()).inflate(checkRadius, checkRadius, checkRadius);
                 Predicate<Entity> predicate = (entity -> {

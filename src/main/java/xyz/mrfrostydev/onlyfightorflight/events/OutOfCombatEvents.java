@@ -34,7 +34,7 @@ public class OutOfCombatEvents {
     @SubscribeEvent
     public static void OutOfCombatBlockPlace(UseItemOnBlockEvent event){
         Player player = event.getPlayer();
-        if (player == null) return;
+        if (player == null || player.isCreative()) return;
         ItemStack usedStack = player.getItemInHand(event.getHand());
         if(!(usedStack.getItem() instanceof BlockItem)) return;
 
@@ -69,7 +69,9 @@ public class OutOfCombatEvents {
     public static void OutOfCombatAttack(LivingDamageEvent.Post event){
         Entity attacker = event.getSource().getEntity();
         Entity victim = event.getEntity();
-        if (!(attacker instanceof Player player)) return;
+        int timeByAttacking = OnlyFofCommonConfig.TIME_BY_ATTACKING.get();
+
+        if (!(attacker instanceof Player player) || timeByAttacking <= 0) return;
         OutOfCombatData data = player.getData(DataAttachmentRegistry.OUT_OF_COMBAT);
 
         boolean willCancelPlace = true;
@@ -83,7 +85,7 @@ public class OutOfCombatEvents {
             }
         }
         if(willCancelPlace){
-            data.updateTime(OnlyFofCommonConfig.TIME_BY_ATTACKING.get());
+            data.updateTime(timeByAttacking);
         }
     }
 
@@ -91,7 +93,9 @@ public class OutOfCombatEvents {
     public static void OutOfCombatDamaged(LivingDamageEvent.Post event){
         Entity victim = event.getEntity();
         Entity attacker = event.getSource().getEntity();
-        if(!(victim instanceof Player player) || attacker == null) return;
+        int timeByDamaged = OnlyFofCommonConfig.TIME_BY_DAMAGED.get();
+
+        if(!(victim instanceof Player player) || attacker == null || timeByDamaged <= 0) return;
         OutOfCombatData data = player.getData(DataAttachmentRegistry.OUT_OF_COMBAT);
 
         boolean willCancelPlace = true;
@@ -105,7 +109,7 @@ public class OutOfCombatEvents {
             }
         }
         if(willCancelPlace){
-            data.updateTime(OnlyFofCommonConfig.TIME_BY_DAMAGED.get());
+            data.updateTime(timeByDamaged);
         }
     }
 
