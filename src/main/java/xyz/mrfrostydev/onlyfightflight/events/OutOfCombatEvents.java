@@ -49,7 +49,7 @@ public class OutOfCombatEvents {
     @SubscribeEvent
     public static void OutOfCombatBlockPlace(PlayerInteractEvent.RightClickBlock event){
         Player player = event.getEntity();
-        if (player == null) return;
+        if (player == null || player.isCreative()) return;
         ItemStack usedStack = event.getItemStack();
         if(!(usedStack.getItem() instanceof BlockItem)) return;
 
@@ -82,8 +82,9 @@ public class OutOfCombatEvents {
     public static void OutOfCombatAttack(LivingHurtEvent event){
         Entity attacker = event.getSource().getEntity();
         Entity victim = event.getEntity();
+        int timeByAttacking = OnlyFofCommonConfig.TIME_BY_ATTACKING.get();
 
-        if (!(attacker instanceof Player player)) return;
+        if (!(attacker instanceof Player player) || timeByAttacking <= 0) return;
         player.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent((data) -> {
             boolean willCancelPlace = true;
             if(isBlacklistOrWhitelistSet(OnlyFofCommonConfig.MOB_BLACKLIST.get(),  OnlyFofCommonConfig.MOB_WHITELIST.get())){
@@ -96,7 +97,7 @@ public class OutOfCombatEvents {
                 }
             }
             if(willCancelPlace){
-                data.updateTime(OnlyFofCommonConfig.TIME_BY_ATTACKING.get());
+                data.updateTime(timeByAttacking);
             }
         });
     }
@@ -105,7 +106,9 @@ public class OutOfCombatEvents {
     public static void OutOfCombatDamaged(LivingHurtEvent event){
         Entity victim = event.getEntity();
         Entity attacker = event.getSource().getEntity();
-        if(!(victim instanceof Player player) || attacker == null) return;
+        int timeByDamaged = OnlyFofCommonConfig.TIME_BY_DAMAGED.get();
+
+        if(!(victim instanceof Player player) || attacker == null || timeByDamaged <= 0) return;
         player.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent((data) -> {
             boolean willCancelPlace = true;
             if(isBlacklistOrWhitelistSet(OnlyFofCommonConfig.MOB_BLACKLIST.get(),  OnlyFofCommonConfig.MOB_WHITELIST.get())){
@@ -118,7 +121,7 @@ public class OutOfCombatEvents {
                 }
             }
             if(willCancelPlace){
-                data.updateTime(OnlyFofCommonConfig.TIME_BY_DAMAGED.get());
+                data.updateTime(timeByDamaged);
             }
         });
     }
