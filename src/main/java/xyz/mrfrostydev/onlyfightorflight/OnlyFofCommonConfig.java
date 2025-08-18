@@ -29,6 +29,7 @@ public class OnlyFofCommonConfig {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> MOB_BLACKLIST;
 
     public static final ModConfigSpec.ConfigValue<Boolean> DISABLE_AGGRO_COMBAT;
+    public static final ModConfigSpec.ConfigValue<Boolean> ENABLE_BY_PROXIMITY;
 
     public static final ModConfigSpec.ConfigValue<Boolean> SAY_YES;
     
@@ -51,6 +52,9 @@ public class OnlyFofCommonConfig {
         BUILDER.comment("");
         BUILDER.comment("Determine whether being targeted by a mod is considered in-combat. \"true\" disables it. (Default: false)");
         DISABLE_AGGRO_COMBAT = BUILDER.worldRestart().define("disableAggroCombat", false);
+        BUILDER.comment("");
+        BUILDER.comment("Trigger in-combat through proximity with mobs instead of based on aggro. Recommended to use with Mob Blacklist. (Default: false)");
+        ENABLE_BY_PROXIMITY = BUILDER.worldRestart().define("enableByProximity", false);
         BUILDER.pop();
 
         BUILDER.push("Allowed/Disallowed Settings");
@@ -83,7 +87,7 @@ public class OnlyFofCommonConfig {
 
         BUILDER.push("Performance");
         BUILDER.comment("");
-        BUILDER.comment("Change how often each player gets checked for any surrounding mobs targeting them. (Default: 60 in ticks)");
+        BUILDER.comment("Change how often each player gets checked for any surrounding mobs. (Default: 60 in ticks)");
         BUILDER.comment("Be careful not to set this too low as it may cause performance issues!");
         UPDATE_INTERVAL = BUILDER.worldRestart().define("updateInterval", 60);
         BUILDER.comment("");
