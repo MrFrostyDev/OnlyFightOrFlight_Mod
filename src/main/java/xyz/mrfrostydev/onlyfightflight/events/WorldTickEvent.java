@@ -26,11 +26,12 @@ public class WorldTickEvent {
 
         level.players().stream().toList().forEach(player -> {
             if (!(player instanceof ServerPlayer svplayer)) return;
+            boolean CommonConfig = !OnlyFofCommonConfig.DISABLE_AGGRO_COMBAT.get() || OnlyFofCommonConfig.ENABLE_BY_PROXIMITY.get();
 
             // Rather hefty check if ran frequently so try to reduce the amount of calls.
-            boolean isBeingTargetted;
+            boolean canTriggerInCombat;
             int checkFreq = OnlyFofCommonConfig.UPDATE_INTERVAL.get();
-            if(!OnlyFofCommonConfig.DISABLE_AGGRO_COMBAT.get()
+            if(CommonConfig
                     && OnlyFofCommonConfig.TIME_BY_TARGETED.get() > 0
                     && level.getServer().getTickCount() % checkFreq == 0){
                 float checkRadius = OnlyFofCommonConfig.RADIUS_CHECK.get();
@@ -49,20 +50,20 @@ public class WorldTickEvent {
                         }
                         if(isAllowed){
                             LivingEntity target = mob.getTarget();
-                            return target != null && target.is(svplayer);
+                            return target != null && target.is(svplayer) || OnlyFofCommonConfig.ENABLE_BY_PROXIMITY.get();
                         }
                     }
                     return false;
                 });
                 List<Entity> nearby = level.getEntities(player, area, predicate);
-                isBeingTargetted = !nearby.isEmpty();
+                canTriggerInCombat = !nearby.isEmpty();
             } else {
-                isBeingTargetted = false;
+                canTriggerInCombat = false;
             }
 
             svplayer.getCapability(OutOfCombatCapability.OUT_OF_COMBAT).ifPresent(data -> {
-                if(isBeingTargetted || data.getOutTime() > 0){
-                    if(isBeingTargetted){
+                if(canTriggerInCombat || data.getOutTime() > 0){
+                    if(canTriggerInCombat){
                         if(data.isOutOfCombat()){
                             data.startCombat(OnlyFofCommonConfig.TIME_BY_TARGETED.get());
                         }

@@ -35,6 +35,7 @@ public class OnlyFofCommonConfig {
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> MOB_BLACKLIST;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> DISABLE_AGGRO_COMBAT;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> ENABLE_BY_PROXIMITY;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> SAY_YES;
 
@@ -57,6 +58,9 @@ public class OnlyFofCommonConfig {
         BUILDER.comment("");
         BUILDER.comment("Determine whether being targeted by a mod is considered in-combat. \"true\" disables it. (Default: false)");
         DISABLE_AGGRO_COMBAT = BUILDER.worldRestart().define("disableAggroCombat", false);
+        BUILDER.comment("");
+        BUILDER.comment("Trigger in-combat through proximity with mobs instead of based on aggro. Recommended to use with Mob Blacklist. (Default: false)");
+        ENABLE_BY_PROXIMITY = BUILDER.worldRestart().define("enableByProximity", false);
         BUILDER.pop();
 
         BUILDER.push("Allowed/Disallowed Settings");
